@@ -1,6 +1,8 @@
 package model;
 
 
+import java.util.ArrayList;
+
 public class GameBoard {
   private final int COLUMNSIZE = 20;
   private final int ROWSIZE = 10;

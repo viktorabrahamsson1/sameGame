@@ -3,12 +3,12 @@ package model;
 
 import java.util.ArrayList;
 
-public class GameBoard {
+public class Board {
   private final int COLUMNSIZE = 20;
   private final int ROWSIZE = 10;
   public Tile[][] board;
 
-  public GameBoard(){
+  public Board(){
     this.board = new Tile[this.ROWSIZE][this.COLUMNSIZE];
   }
 
@@ -18,6 +18,42 @@ public class GameBoard {
     if(isValidPosition(row,col)){
       tile = this.board[row][col];
     }
+    return tile;
+  }
+
+  public void setTile(int row, int col, Tile tile){
+
+    if(isValidPosition(row,col)){
+      this.board[row][col] = tile;
+    }
+  }
+
+  public ArrayList<Tile> getRows(int row){
+    if(!isValidPosition(row,0))
+      throw new IllegalArgumentException("Invalid row");
+    ArrayList<Tile> tiles = new ArrayList<>();
+    for(int i = 0; i < this.COLUMNSIZE; i++){
+      tiles.add(this.board[row][i]);
+    }
+    return tiles;
+  }
+
+  public ArrayList<Tile> getCols(int col){
+    if(!isValidPosition(0,col))
+      throw new IllegalArgumentException("Invalid col");
+
+    ArrayList<Tile> tiles = new ArrayList<>();
+    for(int i = 0; i < this.ROWSIZE; i++){
+      tiles.add(this.board[i][col]);
+    }
+    return tiles;
+  }
+
+  public Tile clearTile(int row, int col){
+    if(!isValidPosition(row,col))
+      throw new IllegalArgumentException("Invalid row");
+    Tile tile = this.board[row][col];
+    this.board[row][col] = null;
     return tile;
   }
 
@@ -35,7 +71,7 @@ public class GameBoard {
           default -> throw new IllegalStateException("Unexpected value: " + randColor);
         };
 
-        Tile tile = new Tile(color);
+        Tile tile = new Tile(color, 1);
         this.board[i][j] = tile;
       }
     }
@@ -56,7 +92,7 @@ public class GameBoard {
 
 
   public boolean isValidPosition(int row, int col){
-    return col >= 0 && col <= this.COLUMNSIZE && row >= 0 && row <= ROWSIZE;
+    return col >= 0 && col < this.COLUMNSIZE && row >= 0 && row < ROWSIZE;
   }
 
 }

@@ -3,13 +3,12 @@ package model;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 public class GameModel {
   private final Board board;
   private GameState gameState;
   private int numberOfColors;
-  List<Observer> observers;
+  List<GameObserver> observers;
 
   public GameModel(Board board,int numberOfColors) {
     this.board = board;
@@ -34,6 +33,12 @@ public class GameModel {
     }
 
     return tiles;
+  }
+
+  public void notifyObservers(){
+    for(GameObserver obs : observers){
+      obs.updateBoard(this.board);
+    }
   }
 
 
@@ -91,8 +96,4 @@ public class GameModel {
     visited[row][col] = true;
     positionsToCheck.add(new int[]{row, col});
   }
-
-
-
-
 }

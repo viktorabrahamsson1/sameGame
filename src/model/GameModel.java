@@ -9,12 +9,32 @@ public class GameModel {
   private GameState gameState;
   private int numberOfColors;
   List<GameObserver> observers;
+  private int points;
+  private int maxPoints;
 
   public GameModel(Board board,int numberOfColors) {
     this.board = board;
     this.gameState = GameState.PLAYING;
     this.numberOfColors = numberOfColors;
     this.observers = new ArrayList<>();
+
+    this.points = 0;
+    this.maxPoints = 0;
+  }
+
+  public int getPoints() {
+    return points;
+  }
+
+  public void setPoints(int points) {
+    this.points = points;
+  }
+
+  public int getMaxPoints() {
+    return maxPoints;
+  }
+  public void setMaxPoints(int maxPoints) {
+    this.maxPoints = maxPoints;
   }
 
   public Board getBoard() {
@@ -36,6 +56,82 @@ public class GameModel {
     this.observers.remove(observer);
   }
 
+  public void notifyObservers(){
+    for(GameObserver obs : observers){
+      obs.updateBoard(this.board);
+    }
+  }
+
+  public void removeConnectedTiles(ArrayList<Tile> connectedTiles){
+    if(connectedTiles == null)
+      throw new IllegalArgumentException("connectedTiles cant be null");
+
+    for(Tile tile : connectedTiles){
+      int[] pos = this.findTilePosition(tile);
+      if(pos == null)
+        continue;
+      this.board.setTile(pos[0], pos[1], null);
+    }
+
+    colapseBoardVertical();
+    colapseBoardHorizontal();
+    notifyObservers();
+  }
+
+  public void colapseBoardVertical(){
+    int rows = this.board.board.length;
+    int cols = this.board.board[0].length;
+
+    for(int col = 0; col < cols; col++){
+      int writeRow = rows - 1;
+
+      for(int row = rows - 1; row >= 0; row--){
+        Tile tile = this.board.getTile(row, col);
+
+        if(tile == null)
+          continue;
+
+        this.board.setTile(writeRow, col, tile);
+
+        if(writeRow != row)
+          this.board.setTile(row, col, null);
+
+        writeRow--;
+      }
+    }
+  }
+
+  public void colapseBoardHorizontal(){
+    int cols = this.board.board[0].length;
+    int writeCol = 0;
+
+    for(int col = 0; col < cols; col++){
+      if(isColumnEmpty(col))
+        continue;
+
+      if(writeCol != col)
+        moveColumn(col, writeCol);
+
+      writeCol++;
+    }
+  }
+
+  private boolean isColumnEmpty(int col){
+    for(int row = 0; row < this.board.board.length; row++){
+      if(this.board.getTile(row, col) != null)
+        return false;
+    }
+
+    return true;
+  }
+
+  private void moveColumn(int fromCol, int toCol){
+    for(int row = 0; row < this.board.board.length; row++){
+      this.board.setTile(row, toCol, this.board.getTile(row, fromCol));
+      this.board.setTile(row, fromCol, null);
+    }
+  }
+
   public ArrayList<Tile> findConnectedTiles(Tile tile){
     ArrayList<int[]> connectedPositions = findConnectedTilePositions(tile);
     ArrayList<Tile> tiles = new ArrayList<>();
@@ -45,12 +141,6 @@ public class GameModel {
     }
 
     return tiles;
-  }
-
-  public void notifyObservers(){
-    for(GameObserver obs : observers){
-      obs.updateBoard(this.board);
-    }
   }
 
 
@@ -107,5 +197,20 @@ public class GameModel {
 
     visited[row][col] = true;
     positionsToCheck.add(new int[]{row, col});
+  }
+
+  //TODO
+  public boolean isGameOver(){
+    if(this.points >= this.maxPoints)
+      this.maxPoints = this.points;
+    this.points = 0;
+    this.gameState = GameState.LOST;
+    return false;
+  }
+
+  private void addPoints(int tilesRemoved){
+    if(tilesRemoved == 0)
+      return;
+    this.points += tilesRemoved * 4;
   }
 }

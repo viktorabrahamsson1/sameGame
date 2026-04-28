@@ -71,6 +71,11 @@ public class Board {
           default -> throw new IllegalStateException("Unexpected value: " + randColor);
         };
 
+        if(j == 10){
+          Tile tile = new Tile(Color.Red,2);
+          this.board[i][j] = tile;
+          continue;
+        }
         Tile tile = new Tile(color, 1);
         this.board[i][j] = tile;
       }

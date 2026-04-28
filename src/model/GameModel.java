@@ -14,6 +14,7 @@ public class GameModel {
     this.board = board;
     this.gameState = GameState.PLAYING;
     this.numberOfColors = numberOfColors;
+    this.observers = new ArrayList<>();
   }
 
   public Board getBoard() {
@@ -22,6 +23,17 @@ public class GameModel {
 
   public GameState getGameState() {
     return this.gameState;
+  }
+
+  public void addObserver(GameObserver observer){
+    if(observer == null)
+      throw new IllegalArgumentException("observer cant be null");
+
+    this.observers.add(observer);
+  }
+
+  public void removeObserver(GameObserver observer){
+    this.observers.remove(observer);
   }
 
   public ArrayList<Tile> findConnectedTiles(Tile tile){

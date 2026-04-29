@@ -239,8 +239,9 @@ public class GameModel {
   }
 
   private void addPoints(int tilesRemoved){
-    if(tilesRemoved == 0)
-      return;
-    this.points += tilesRemoved * 4;
-  }
+  if(tilesRemoved < 2)
+    return;
+
+  this.points += (tilesRemoved - 2) * (tilesRemoved - 2);
+}
 }

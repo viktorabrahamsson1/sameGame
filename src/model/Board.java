@@ -17,8 +17,8 @@ public class Board {
     if(num <= 0)
       throw new IllegalArgumentException("amount of colors cant be 0 or less");
 
-    if(num > 0 && num < 6){
-      this.numberOfColors = numberOfColors;
+    if(num < 6){
+      this.numberOfColors = num;
     } else {
       this.numberOfColors = 5;
     }

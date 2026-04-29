@@ -1,79 +1,61 @@
 package views;
 
+import controller.GameController;
 import model.Board;
-import model.GameObserver;
 import model.GameModel;
+import model.GameObserver;
 import model.Tile;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TerminalView implements GameObserver {
-  private final GameModel gameModel;
+  private final GameModel model;
+  private final GameController controller;
+  private final Scanner scanner;
 
-  public TerminalView(GameModel gameModel) {
-    if(gameModel == null)
-      throw new IllegalArgumentException("gameModel cant be null");
+  public TerminalView(GameModel model, GameController controller) {
+    if (model == null || controller == null) {
+      throw new IllegalArgumentException("model and controller cannot be null");
+    }
 
-    this.gameModel = gameModel;
-  }
-
-  @Override
-  public void updateBoard(Board board) {
-    printBoard(board);
+    this.model = model;
+    this.controller = controller;
+    this.scanner = new Scanner(System.in);
   }
 
   public void run() {
-    Scanner scanner = new Scanner(System.in);
-    Board board = this.gameModel.getBoard();
-
     System.out.println("SameGame terminal test");
     System.out.println("Write a move as: row col");
-    System.out.println("Rows: 0-" + (board.getRowSize() - 1) + ", columns: 0-" + (board.getColumnSize() - 1));
-    System.out.println("Only groups with 2 or more connected tiles can be removed.");
     System.out.println("Write q to quit.");
-    updateBoard(board);
 
-    while(true){
+    updateBoard(model.getBoard());
+
+    while (true) {
       System.out.print("Move> ");
       String input = scanner.nextLine().trim();
 
-      if(input.equalsIgnoreCase("q"))
+      if (input.equalsIgnoreCase("q")) {
         break;
+      }
 
       String[] parts = input.split("\\s+");
-      if(parts.length != 2){
+
+      if (parts.length != 2) {
         System.out.println("Invalid input. Example: 4 7");
         continue;
       }
 
-      try{
+      try {
         int row = Integer.parseInt(parts[0]);
         int col = Integer.parseInt(parts[1]);
 
-        if(!board.isValidPosition(row, col)){
-          System.out.println("Position is outside the board.");
-          continue;
-        }
+        boolean moveWasMade = controller.playMove(row, col);
 
-        Tile selectedTile = board.getTile(row, col);
-        if(selectedTile == null){
-          System.out.println("That position is empty.");
-          continue;
-        }
-
-        ArrayList<Tile> connectedTiles = this.gameModel.findConnectedTiles(selectedTile);
-        System.out.println("Selected " + getTileSymbol(selectedTile) + " at row " + row + ", col " + col);
-        System.out.println("Connected group size: " + connectedTiles.size());
-
-        if(connectedTiles.size() < 2){
+        if (!moveWasMade) {
           System.out.println("Invalid move. Choose a group with at least 2 connected tiles.");
-          continue;
         }
 
-        this.gameModel.removeConnectedTiles(connectedTiles);
-        System.out.println("Removed group. Board collapsed vertically and horizontally.");
-      } catch(NumberFormatException e){
+      } catch (NumberFormatException e) {
         System.out.println("Row and column must be numbers.");
       }
     }
@@ -82,18 +64,24 @@ public class TerminalView implements GameObserver {
     System.out.println("Bye!");
   }
 
+  @Override
+  public void updateBoard(Board board) {
+    printBoard(board);
+  }
 
-  private void printBoard(Board board){
+  private void printBoard(Board board) {
     System.out.print("    ");
-    for(int col = 0; col < board.getColumnSize(); col++){
+
+    for (int col = 0; col < board.board[0].length; col++) {
       System.out.printf("%2d ", col);
     }
+
     System.out.println();
 
-    for(int row = 0; row < board.getRowSize(); row++){
+    for (int row = 0; row < board.board.length; row++) {
       System.out.printf("%2d: ", row);
 
-      for(int col = 0; col < board.getColumnSize(); col++){
+      for (int col = 0; col < board.board[row].length; col++) {
         System.out.print(" " + getTileSymbol(board.getTile(row, col)) + " ");
       }
 
@@ -103,11 +91,12 @@ public class TerminalView implements GameObserver {
     System.out.println();
   }
 
-  private String getTileSymbol(Tile tile){
-    if(tile == null)
+  private String getTileSymbol(Tile tile) {
+    if (tile == null) {
       return ".";
+    }
 
-    return switch(tile.getColor()){
+    return switch (tile.getColor()) {
       case Black -> "K";
       case Blue -> "B";
       case Orange -> "O";

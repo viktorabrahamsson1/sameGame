@@ -74,10 +74,10 @@ public class GuiView extends JFrame implements GameObserver {
     GameState gameState = model.getGameState();
 
     if (gameState == GameState.LOST) {
-      statusLabel.setText("LOST");
+      statusLabel.setText("GAME OVER: no avaiable moves left");
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
-      statusLabel.setText("WON");
+      statusLabel.setText("GAME OVER: YOU WON");
       playAgainButton.setVisible(true);
     } else {
       statusLabel.setText("");

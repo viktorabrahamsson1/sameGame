@@ -40,6 +40,13 @@ public class GameModel {
     this.maxPoints = maxPoints;
   }
 
+  public void startNewGame(){
+    this.board.randomizeBoard();
+    this.gameState = GameState.PLAYING;
+    this.points = 0;
+    this.notifyObservers();
+  }
+
 
 
   public void addObserver(GameObserver observer){
@@ -77,7 +84,7 @@ public class GameModel {
     notifyObservers();
   }
 
-  public void colapseBoardVertical(){
+  private void colapseBoardVertical(){
     int rows = this.board.getRowSize();
     int cols = this.board.getColumnSize();
 
@@ -100,7 +107,7 @@ public class GameModel {
     }
   }
 
-  public void colapseBoardHorizontal(){
+  private void colapseBoardHorizontal(){
     int cols = this.board.getColumnSize();
     int writeCol = 0;
 
@@ -199,7 +206,7 @@ public class GameModel {
   }
 
   //TODO
-  public boolean checkIfUserLost(){
+  public boolean hasAvaibleMoves(){
     for(int i = 0; i < this.board.getRowSize(); i++){
       for(int j = 0; j < this.board.getColumnSize(); j++){
         Tile tile = this.board.getTile(i,j);
@@ -227,7 +234,7 @@ public class GameModel {
   public void updateGameState(){
     if(this.checkIfNoTilesLeft()){
       this.gameState = GameState.WON;
-    } else if(this.checkIfUserLost()){
+    } else if(this.hasAvaibleMoves()){
       this.gameState = GameState.LOST;
     } else {
       return;

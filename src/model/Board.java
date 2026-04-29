@@ -1,23 +1,27 @@
 package model;
 
 
-import java.util.ArrayList;
-
 public class Board {
   private final int COLUMNSIZE = 20;
   private final int ROWSIZE = 10;
   private final Tile[][] board;
+  private int numberOfColors;
 
   public Board(){
     this.board = new Tile[this.ROWSIZE][this.COLUMNSIZE];
   }
 
-  public int getRowSize(){
-    return this.board.length;
-  }
+  public int getRowSize(){return this.board.length;}
+  public int getColumnSize(){return this.board[0].length;}
+  public void setNumberOfColors(int num){
+    if(num <= 0)
+      throw new IllegalArgumentException("amount of colors cant be 0 or less");
 
-  public int getColumnSize(){
-    return this.board[0].length;
+    if(num > 0 && num < 6){
+      this.numberOfColors = numberOfColors;
+    } else {
+      this.numberOfColors = 5;
+    }
   }
 
   public Tile getTile(int row, int col){
@@ -35,40 +39,11 @@ public class Board {
     }
   }
 
-  public ArrayList<Tile> getRows(int row){
-    if(!isValidPosition(row,0))
-      throw new IllegalArgumentException("Invalid row");
-    ArrayList<Tile> tiles = new ArrayList<>();
-    for(int i = 0; i < this.COLUMNSIZE; i++){
-      tiles.add(this.board[row][i]);
-    }
-    return tiles;
-  }
-
-  public ArrayList<Tile> getCols(int col){
-    if(!isValidPosition(0,col))
-      throw new IllegalArgumentException("Invalid col");
-
-    ArrayList<Tile> tiles = new ArrayList<>();
-    for(int i = 0; i < this.ROWSIZE; i++){
-      tiles.add(this.board[i][col]);
-    }
-    return tiles;
-  }
-
-  public Tile clearTile(int row, int col){
-    if(!isValidPosition(row,col))
-      throw new IllegalArgumentException("Invalid row");
-    Tile tile = this.board[row][col];
-    this.board[row][col] = null;
-    return tile;
-  }
-
   public void randomizeBoard(){
 
     for(int i = 0; i < this.ROWSIZE; i++){
       for(int j = 0; j < this.COLUMNSIZE; j++){
-        int randColor = (int) (Math.random() * 5);
+        int randColor = (int) (Math.random() * this.numberOfColors);
         Color color = switch (randColor){
           case 0 -> Color.Black;
           case 1 -> Color.Blue;
@@ -79,11 +54,11 @@ public class Board {
         };
 
         if(j == 10){
-          Tile tile = new Tile(Color.Red,2);
+          Tile tile = new Tile(Color.Red);
           this.board[i][j] = tile;
           continue;
         }
-        Tile tile = new Tile(color, 1);
+        Tile tile = new Tile(color);
         this.board[i][j] = tile;
       }
     }

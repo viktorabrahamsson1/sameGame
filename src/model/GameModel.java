@@ -8,7 +8,7 @@ public class GameModel {
   private final Board board;
   private GameState gameState;
   private int numberOfColors;
-  List<GameObserver> observers;
+  private List<GameObserver> observers;
   private int points;
   private int maxPoints;
 
@@ -18,6 +18,8 @@ public class GameModel {
     this.numberOfColors = numberOfColors;
     this.observers = new ArrayList<>();
 
+    this.board.setNumberOfColors(numberOfColors);
+
     this.points = 0;
     this.maxPoints = 0;
   }
@@ -25,25 +27,20 @@ public class GameModel {
   public int getPoints() {
     return points;
   }
-
-  public void setPoints(int points) {
-    this.points = points;
-  }
-
   public int getMaxPoints() {
     return maxPoints;
   }
-  public void setMaxPoints(int maxPoints) {
-    this.maxPoints = maxPoints;
-  }
-
   public Board getBoard() {
     return this.board;
   }
-
   public GameState getGameState() {
     return this.gameState;
   }
+  private void setMaxPoints(int maxPoints) {
+    this.maxPoints = maxPoints;
+  }
+
+
 
   public void addObserver(GameObserver observer){
     if(observer == null)
@@ -75,6 +72,8 @@ public class GameModel {
 
     colapseBoardVertical();
     colapseBoardHorizontal();
+    addPoints(connectedTiles.size());
+    updateGameState();
     notifyObservers();
   }
 
@@ -200,12 +199,43 @@ public class GameModel {
   }
 
   //TODO
-  public boolean isGameOver(){
+  public boolean checkIfUserLost(){
+    for(int i = 0; i < this.board.getRowSize(); i++){
+      for(int j = 0; j < this.board.getColumnSize(); j++){
+        Tile tile = this.board.getTile(i,j);
+        if(tile == null)
+          continue;
+        if(this.findConnectedTilePositions(tile).size() > 1){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public boolean checkIfNoTilesLeft(){
+    for(int i = 0; i < this.board.getRowSize(); i++){
+      for(int j = 0; j < this.board.getColumnSize(); j++){
+        if(this.board.getTile(i,j) != null)
+          return false;
+      }
+    }
+    return true;
+  }
+
+
+  public void updateGameState(){
+    if(this.checkIfUserLost()){
+      this.gameState = GameState.LOST;
+    } else if(this.checkIfNoTilesLeft()){
+      this.gameState = GameState.WON;
+    } else {
+      return;
+    }
+
     if(this.points >= this.maxPoints)
-      this.maxPoints = this.points;
+      this.setMaxPoints(this.points);
     this.points = 0;
-    this.gameState = GameState.LOST;
-    return false;
   }
 
   private void addPoints(int tilesRemoved){

@@ -3,7 +3,7 @@ package model;
 public class Tile {
   private Color color;
 
-  public Tile(Color color, int id){
+  public Tile(Color color){
     this.color = color;
   }
 

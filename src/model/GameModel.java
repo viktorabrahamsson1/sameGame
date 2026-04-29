@@ -239,14 +239,14 @@ public class GameModel {
       return;
     }
 
-    if(this.points >= this.maxPoints)
+    if(this.points > this.maxPoints)
       this.setMaxPoints(this.points);
   }
 
   private void addPoints(int tilesRemoved){
-  if(tilesRemoved < 2)
-    return;
+    if(tilesRemoved < 2)
+      return;
 
-  this.points += (tilesRemoved - 2) * (tilesRemoved - 2);
-}
+    this.points += tilesRemoved * 4;
+  }
 }

@@ -40,7 +40,7 @@ public class TerminalView implements GameObserver {
         break;
       }
 
-      if (input.equalsIgnoreCase("p")) {
+      if (input.equalsIgnoreCase("p") && model.getGameState() != GameState.PLAYING) {
         controller.startNewGame();
         continue;
       }

@@ -11,7 +11,7 @@ public class Main {
     GameController controller = new GameController(gm);
 
     TerminalView terminalView = new TerminalView(gm, controller);
-    GuiView guiView = new GuiView(controller);
+    GuiView guiView = new GuiView(gm, controller);
 
     gm.addObserver(terminalView);
     gm.addObserver(guiView);

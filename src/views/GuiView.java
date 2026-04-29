@@ -2,6 +2,7 @@ package views;
 
 import controller.GameController;
 import model.Board;
+import model.GameModel;
 import model.GameObserver;
 import model.Tile;
 
@@ -9,33 +10,77 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GuiView extends JFrame implements GameObserver {
+  private final GameModel model;
   private final GameController controller;
   private Board board;
   private final BoardPanel boardPanel;
+  private final JLabel scoreLabel;
+  private final JLabel bestScoreLabel;
 
-  public GuiView(GameController controller) {
-    if (controller == null) {
-      throw new IllegalArgumentException("controller cannot be null");
+  public GuiView(GameModel model, GameController controller) {
+    if (model == null || controller == null) {
+      throw new IllegalArgumentException("model and controller cannot be null");
     }
 
+    this.model = model;
     this.controller = controller;
     this.boardPanel = new BoardPanel();
 
+    JLabel titleLabel = new JLabel("SAMEGAME", SwingConstants.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+
+    scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
+    bestScoreLabel = new JLabel("Best score: 0", SwingConstants.CENTER);
+
+    JPanel topPanel = new JPanel(new GridLayout(3, 1));
+    topPanel.add(titleLabel);
+    topPanel.add(scoreLabel);
+    topPanel.add(bestScoreLabel);
+
     setTitle("SameGame");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(800, 500);
+    setSize(800, 600);
     setLocationRelativeTo(null);
-    add(boardPanel);
+    setLayout(new BorderLayout());
+
+    add(topPanel, BorderLayout.NORTH);
+    add(boardPanel, BorderLayout.CENTER);
+
     setVisible(true);
   }
 
   @Override
   public void updateBoard(Board board) {
     this.board = board;
+
+    scoreLabel.setText("Score: " + model.getPoints());
+    bestScoreLabel.setText("Best score: " + model.getMaxPoints());
+
     boardPanel.repaint();
   }
 
   private class BoardPanel extends JPanel {
+    public BoardPanel() {
+      addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (board == null) {
+            return;
+          }
+
+          int tileSize = Math.min(
+              getWidth() / board.getColumnSize(),
+              getHeight() / board.getRowSize()
+          );
+
+          int col = e.getX() / tileSize;
+          int row = e.getY() / tileSize;
+
+          controller.playMove(row, col);
+        }
+      });
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
       super.paintComponent(g);
@@ -67,27 +112,6 @@ public class GuiView extends JFrame implements GameObserver {
           g.drawRect(x, y, tileSize, tileSize);
         }
       }
-    }
-
-    public BoardPanel() {
-      addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (board == null) {
-            return;
-          }
-
-          int tileSize = Math.min(
-              getWidth() / board.getColumnSize(),
-              getHeight() / board.getRowSize()
-          );
-
-          int col = e.getX() / tileSize;
-          int row = e.getY() / tileSize;
-
-          controller.playMove(row, col);
-        }
-      });
     }
   }
 

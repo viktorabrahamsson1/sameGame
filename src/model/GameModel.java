@@ -225,10 +225,10 @@ public class GameModel {
 
 
   public void updateGameState(){
-    if(this.checkIfUserLost()){
-      this.gameState = GameState.LOST;
-    } else if(this.checkIfNoTilesLeft()){
+    if(this.checkIfNoTilesLeft()){
       this.gameState = GameState.WON;
+    } else if(this.checkIfUserLost()){
+      this.gameState = GameState.LOST;
     } else {
       return;
     }

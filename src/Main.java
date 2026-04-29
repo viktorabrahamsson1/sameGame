@@ -16,9 +16,7 @@ public class Main {
     gm.addObserver(terminalView);
     gm.addObserver(guiView);
 
-    board.randomizeBoard();
-    gm.notifyObservers();
-
+    gm.startNewGame();
     terminalView.run();
   }
 }

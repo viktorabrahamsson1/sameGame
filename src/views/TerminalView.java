@@ -72,7 +72,7 @@ public class TerminalView implements GameObserver {
   private void printBoard(Board board) {
     System.out.print("    ");
 
-    for (int col = 0; col < board.board[0].length; col++) {
+    for (int row = 0; row < board.getRowSize(); row++) {
       System.out.printf("%2d ", col);
     }
 
@@ -81,7 +81,7 @@ public class TerminalView implements GameObserver {
     for (int row = 0; row < board.board.length; row++) {
       System.out.printf("%2d: ", row);
 
-      for (int col = 0; col < board.board[row].length; col++) {
+      for (int col = 0; col < board.getColumnSize(); col++) {
         System.out.print(" " + getTileSymbol(board.getTile(row, col)) + " ");
       }
 

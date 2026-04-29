@@ -82,4 +82,15 @@ public class Board {
     return col >= 0 && col < this.COLUMNSIZE && row >= 0 && row < ROWSIZE;
   }
 
+  public boolean isEmpty() {
+  for (int row = 0; row < ROWSIZE; row++) {
+    for (int col = 0; col < COLUMNSIZE; col++) {
+      if (board[row][col] != null) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 }

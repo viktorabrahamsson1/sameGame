@@ -1,14 +1,13 @@
 package views;
 
 import controller.GameController;
+import java.awt.*;
+import javax.swing.*;
 import model.Board;
 import model.GameModel;
 import model.GameObserver;
 import model.GameState;
 import model.Tile;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class GuiView extends JFrame implements GameObserver {
   private final GameModel model;
@@ -74,10 +73,12 @@ public class GuiView extends JFrame implements GameObserver {
     GameState gameState = model.getGameState();
 
     if (gameState == GameState.LOST) {
-      statusLabel.setText("GAME OVER: no avaiable moves left");
+      statusLabel.setText("GAME OVER: no avaiable moves left"); 
+      statusLabel.setForeground(Color.RED);
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
       statusLabel.setText("GAME OVER: YOU WON");
+      statusLabel.setForeground(new Color(0, 150, 0));
       playAgainButton.setVisible(true);
     } else {
       statusLabel.setText("");
@@ -86,6 +87,8 @@ public class GuiView extends JFrame implements GameObserver {
   }
 
   private class BoardPanel extends JPanel {
+    private int hoverRow = -1;
+    private int hoverCol = -1;
     public BoardPanel() {
       addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
@@ -103,12 +106,37 @@ public class GuiView extends JFrame implements GameObserver {
             return;
           }
 
-          int col = e.getX() / tileSize;
-          int row = e.getY() / tileSize;
+          int offsetX = (getWidth() - tileSize * board.getColumnSize()) / 2;
+          int offsetY = (getHeight() - tileSize * board.getRowSize()) / 2;
+
+          int col = (e.getX() - offsetX) / tileSize;
+          int row = (e.getY() - offsetY) / tileSize;
 
           controller.playMove(row, col);
         }
       });
+
+      addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+    @Override
+    public void mouseMoved(java.awt.event.MouseEvent e) {
+      if (board == null) return;
+
+      int tileSize = Math.min(
+          getWidth() / board.getColumnSize(),
+          getHeight() / board.getRowSize()
+      );
+
+      if (tileSize <= 0) return;
+
+      int offsetX = (getWidth() - tileSize * board.getColumnSize()) / 2;
+      int offsetY = (getHeight() - tileSize * board.getRowSize()) / 2;
+
+      hoverCol = (e.getX() - offsetX) / tileSize;
+      hoverRow = (e.getY() - offsetY) / tileSize;
+
+      repaint();
+    }
+  });
     }
 
     @Override
@@ -124,9 +152,23 @@ public class GuiView extends JFrame implements GameObserver {
           getHeight() / board.getRowSize()
       );
 
+      int offsetX = (getWidth() - tileSize * board.getColumnSize()) / 2;
+      int offsetY = (getHeight() - tileSize * board.getRowSize()) / 2;
+
       if (tileSize <= 0) {
         return;
       }
+
+      java.util.ArrayList<Tile> highlightTiles = null;
+
+     if (hoverRow >= 0 && hoverCol >= 0) {
+       if (board.isValidPosition(hoverRow, hoverCol)) {
+      Tile tile = board.getTile(hoverRow, hoverCol);
+      if (tile != null) {
+      highlightTiles = model.findConnectedTiles(tile);
+    }
+  }
+}
 
       for (int row = 0; row < board.getRowSize(); row++) {
         for (int col = 0; col < board.getColumnSize(); col++) {
@@ -138,8 +180,8 @@ public class GuiView extends JFrame implements GameObserver {
             g.setColor(toAwtColor(tile));
           }
 
-          int x = col * tileSize;
-          int y = row * tileSize;
+          int x = offsetX + col * tileSize;
+          int y = offsetY + row * tileSize;
 
           g.fillRect(x, y, tileSize, tileSize);
           g.setColor(Color.DARK_GRAY);

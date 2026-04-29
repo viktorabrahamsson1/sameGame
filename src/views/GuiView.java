@@ -18,6 +18,7 @@ public class GuiView extends JFrame implements GameObserver {
   private final JLabel scoreLabel;
   private final JLabel bestScoreLabel;
   private final JLabel statusLabel;
+  private final JLabel difficultyLevel;
   private final JButton playAgainButton;
 
   public GuiView(GameModel model, GameController controller) {
@@ -35,6 +36,7 @@ public class GuiView extends JFrame implements GameObserver {
     scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
     bestScoreLabel = new JLabel("Best score: 0", SwingConstants.CENTER);
     statusLabel = new JLabel("", SwingConstants.CENTER);
+    difficultyLevel = new JLabel("Difficulty level: ", SwingConstants.CENTER);
     statusLabel.setFont(new Font("Arial", Font.BOLD, 24));
     playAgainButton = new JButton("Play again");
     playAgainButton.setVisible(false);
@@ -42,6 +44,7 @@ public class GuiView extends JFrame implements GameObserver {
 
     JPanel topPanel = new JPanel(new GridLayout(5, 1));
     topPanel.add(titleLabel);
+    topPanel.add(difficultyLevel);
     topPanel.add(scoreLabel);
     topPanel.add(bestScoreLabel);
     topPanel.add(statusLabel);
@@ -63,6 +66,7 @@ public class GuiView extends JFrame implements GameObserver {
   public void updateBoard(Board board) {
     this.board = board;
 
+    difficultyLevel.setText("Difficulty " + model.getDifficultyLevel());
     scoreLabel.setText("Score: " + model.getPoints());
     bestScoreLabel.setText("Best score: " + model.getMaxPoints());
     updateGameOverControls();

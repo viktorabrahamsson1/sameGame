@@ -1,12 +1,10 @@
 package model;
 
 public class Tile {
-  private final int tileId;
   private Color color;
 
   public Tile(Color color, int id){
     this.color = color;
-    this.tileId = id;
   }
 
   public Color getColor(){return this.color;}
@@ -17,6 +15,4 @@ public class Tile {
 
     this.color = color;
   }
-
-  public int getID(){return this.tileId;}
 }

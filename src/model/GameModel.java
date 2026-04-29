@@ -60,7 +60,7 @@ public class GameModel {
     this.observers.remove(observer);
   }
 
-  public void notifyObservers(){
+  private void notifyObservers(){
     for(GameObserver obs : observers){
       obs.updateBoard(this.board);
     }
@@ -205,8 +205,7 @@ public class GameModel {
     positionsToCheck.add(new int[]{row, col});
   }
 
-  //TODO
-  public boolean hasAvaibleMoves(){
+  public boolean hasNoAvailableMoves(){
     for(int i = 0; i < this.board.getRowSize(); i++){
       for(int j = 0; j < this.board.getColumnSize(); j++){
         Tile tile = this.board.getTile(i,j);
@@ -234,7 +233,7 @@ public class GameModel {
   public void updateGameState(){
     if(this.checkIfNoTilesLeft()){
       this.gameState = GameState.WON;
-    } else if(this.hasAvaibleMoves()){
+    } else if(this.hasNoAvailableMoves()){
       this.gameState = GameState.LOST;
     } else {
       return;
@@ -242,7 +241,6 @@ public class GameModel {
 
     if(this.points >= this.maxPoints)
       this.setMaxPoints(this.points);
-    this.points = 0;
   }
 
   private void addPoints(int tilesRemoved){

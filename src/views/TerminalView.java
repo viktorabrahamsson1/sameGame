@@ -4,6 +4,7 @@ import controller.GameController;
 import model.Board;
 import model.GameModel;
 import model.GameObserver;
+import model.GameState;
 import model.Tile;
 
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class TerminalView implements GameObserver {
   public void run() {
     System.out.println("SameGame terminal test");
     System.out.println("Write a move as: row col");
+    System.out.println("Write p to play again after the game ends.");
     System.out.println("Write q to quit.");
 
     updateBoard(model.getBoard());
@@ -36,6 +38,16 @@ public class TerminalView implements GameObserver {
 
       if (input.equalsIgnoreCase("q")) {
         break;
+      }
+
+      if (input.equalsIgnoreCase("p")) {
+        controller.startNewGame();
+        continue;
+      }
+
+      if (model.getGameState() != GameState.PLAYING) {
+        System.out.println("Game over. Write p to play again or q to quit.");
+        continue;
       }
 
       String[] parts = input.split("\\s+");
@@ -67,6 +79,8 @@ public class TerminalView implements GameObserver {
   @Override
   public void updateBoard(Board board) {
     printBoard(board);
+    printScore();
+    printGameOverMessage();
   }
 
   private void printBoard(Board board) {
@@ -91,6 +105,23 @@ public class TerminalView implements GameObserver {
     System.out.println();
   }
 
+  private void printScore() {
+    System.out.println("Score: " + model.getPoints());
+    System.out.println("Best score: " + model.getMaxPoints());
+    System.out.println();
+  }
+
+  private void printGameOverMessage() {
+    if (model.getGameState() == GameState.LOST) {
+      System.out.println("LOST");
+      System.out.println("Write p to play again.");
+      System.out.println();
+    } else if (model.getGameState() == GameState.WON) {
+      System.out.println("WON");
+      System.out.println("Write p to play again.");
+      System.out.println();
+    }
+  }
 
   private String getTileSymbol(Tile tile) {
     if (tile == null) {

@@ -2,6 +2,7 @@ package controller;
 
 import model.Board;
 import model.GameModel;
+import model.GameState;
 import model.Tile;
 
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public class GameController {
    * @return true if a valid group was removed, otherwise false
    */
   public boolean playMove(int row, int col) {
+    if (model.getGameState() != GameState.PLAYING) {
+      return false;
+    }
+
     Board board = model.getBoard();
 
     if (!board.isValidPosition(row, col)) {
@@ -54,5 +59,9 @@ public class GameController {
 
     model.removeConnectedTiles(connectedTiles);
     return true;
+  }
+
+  public void startNewGame() {
+    model.startNewGame();
   }
 }

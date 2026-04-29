@@ -4,6 +4,7 @@ import controller.GameController;
 import model.Board;
 import model.GameModel;
 import model.GameObserver;
+import model.GameState;
 import model.Tile;
 
 import javax.swing.*;
@@ -16,6 +17,8 @@ public class GuiView extends JFrame implements GameObserver {
   private final BoardPanel boardPanel;
   private final JLabel scoreLabel;
   private final JLabel bestScoreLabel;
+  private final JLabel statusLabel;
+  private final JButton playAgainButton;
 
   public GuiView(GameModel model, GameController controller) {
     if (model == null || controller == null) {
@@ -31,11 +34,18 @@ public class GuiView extends JFrame implements GameObserver {
 
     scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
     bestScoreLabel = new JLabel("Best score: 0", SwingConstants.CENTER);
+    statusLabel = new JLabel("", SwingConstants.CENTER);
+    statusLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    playAgainButton = new JButton("Play again");
+    playAgainButton.setVisible(false);
+    playAgainButton.addActionListener(e -> controller.startNewGame());
 
-    JPanel topPanel = new JPanel(new GridLayout(3, 1));
+    JPanel topPanel = new JPanel(new GridLayout(5, 1));
     topPanel.add(titleLabel);
     topPanel.add(scoreLabel);
     topPanel.add(bestScoreLabel);
+    topPanel.add(statusLabel);
+    topPanel.add(playAgainButton);
 
     setTitle("SameGame");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,8 +65,24 @@ public class GuiView extends JFrame implements GameObserver {
 
     scoreLabel.setText("Score: " + model.getPoints());
     bestScoreLabel.setText("Best score: " + model.getMaxPoints());
+    updateGameOverControls();
 
     boardPanel.repaint();
+  }
+
+  private void updateGameOverControls() {
+    GameState gameState = model.getGameState();
+
+    if (gameState == GameState.LOST) {
+      statusLabel.setText("LOST");
+      playAgainButton.setVisible(true);
+    } else if (gameState == GameState.WON) {
+      statusLabel.setText("WON");
+      playAgainButton.setVisible(true);
+    } else {
+      statusLabel.setText("");
+      playAgainButton.setVisible(false);
+    }
   }
 
   private class BoardPanel extends JPanel {
@@ -72,6 +98,10 @@ public class GuiView extends JFrame implements GameObserver {
               getWidth() / board.getColumnSize(),
               getHeight() / board.getRowSize()
           );
+
+          if (tileSize <= 0) {
+            return;
+          }
 
           int col = e.getX() / tileSize;
           int row = e.getY() / tileSize;
@@ -93,6 +123,10 @@ public class GuiView extends JFrame implements GameObserver {
           getWidth() / board.getColumnSize(),
           getHeight() / board.getRowSize()
       );
+
+      if (tileSize <= 0) {
+        return;
+      }
 
       for (int row = 0; row < board.getRowSize(); row++) {
         for (int col = 0; col < board.getColumnSize(); col++) {

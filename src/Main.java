@@ -1,6 +1,7 @@
 import model.Board;
 import model.GameModel;
 import views.TerminalView;
+import controller.GameController;
 
 public class Main {
   public static void main(String[] args) {

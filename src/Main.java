@@ -17,7 +17,6 @@ public class Main {
     gm.addObserver(guiView);
 
     gm.startNewGame();
-    
     terminalView.run();
   }
 }

@@ -6,12 +6,19 @@ import java.util.ArrayList;
 public class Board {
   private final int COLUMNSIZE = 20;
   private final int ROWSIZE = 10;
-  public Tile[][] board;
+  private final Tile[][] board;
 
   public Board(){
     this.board = new Tile[this.ROWSIZE][this.COLUMNSIZE];
   }
 
+  public int getRowSize(){
+    return this.board.length;
+  }
+
+  public int getColumnSize(){
+    return this.board[0].length;
+  }
 
   public Tile getTile(int row, int col){
     Tile tile = null;

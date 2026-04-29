@@ -79,8 +79,8 @@ public class GameModel {
   }
 
   public void colapseBoardVertical(){
-    int rows = this.board.board.length;
-    int cols = this.board.board[0].length;
+    int rows = this.board.getRowSize();
+    int cols = this.board.getColumnSize();
 
     for(int col = 0; col < cols; col++){
       int writeRow = rows - 1;
@@ -102,7 +102,7 @@ public class GameModel {
   }
 
   public void colapseBoardHorizontal(){
-    int cols = this.board.board[0].length;
+    int cols = this.board.getColumnSize();
     int writeCol = 0;
 
     for(int col = 0; col < cols; col++){
@@ -117,7 +117,7 @@ public class GameModel {
   }
 
   private boolean isColumnEmpty(int col){
-    for(int row = 0; row < this.board.board.length; row++){
+    for(int row = 0; row < this.board.getRowSize(); row++){
       if(this.board.getTile(row, col) != null)
         return false;
     }
@@ -126,7 +126,7 @@ public class GameModel {
   }
 
   private void moveColumn(int fromCol, int toCol){
-    for(int row = 0; row < this.board.board.length; row++){
+    for(int row = 0; row < this.board.getRowSize(); row++){
       this.board.setTile(row, toCol, this.board.getTile(row, fromCol));
       this.board.setTile(row, fromCol, null);
     }
@@ -154,7 +154,7 @@ public class GameModel {
 
     Color targetColor = tile.getColor();
     ArrayList<int[]> connectedPositions = new ArrayList<>();
-    boolean[][] visited = new boolean[this.board.board.length][this.board.board[0].length];
+    boolean[][] visited = new boolean[this.board.getRowSize()][this.board.getColumnSize()];
     ArrayDeque<int[]> positionsToCheck = new ArrayDeque<>();
 
     positionsToCheck.add(startPosition);
@@ -181,8 +181,8 @@ public class GameModel {
   }
 
   private int[] findTilePosition(Tile tile){
-    for(int row = 0; row < this.board.board.length; row++){
-      for(int col = 0; col < this.board.board[row].length; col++){
+    for(int row = 0; row < this.board.getRowSize(); row++){
+      for(int col = 0; col < this.board.getColumnSize(); col++){
         if(this.board.getTile(row, col) == tile)
           return new int[]{row, col};
       }

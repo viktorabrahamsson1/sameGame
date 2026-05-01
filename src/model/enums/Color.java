@@ -1,4 +1,4 @@
-package model;
+package model.enums;
 
 /**
  *  The possible colors for each tile that could be in the game

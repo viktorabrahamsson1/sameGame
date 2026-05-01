@@ -3,8 +3,8 @@ package views;
 import controller.GameController;
 import model.Board;
 import model.GameModel;
-import model.GameObserver;
-import model.GameState;
+import model.observers.GameObserver;
+import model.enums.GameState;
 import model.MoveSuggestion;
 import model.Tile;
 

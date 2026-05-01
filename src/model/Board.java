@@ -1,5 +1,7 @@
 package model;
 
+import model.enums.Color;
+
 /**
  * Represents the board of the sameGame and contains a column size, row size, board and
  * number of colors in the board.

@@ -1,4 +1,7 @@
 import model.*;
+import model.sounds.LostSound;
+import model.sounds.TileClearSound;
+import model.sounds.WinSound;
 import views.TerminalView;
 import views.GuiView;
 import controller.GameController;

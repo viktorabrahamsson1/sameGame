@@ -1,4 +1,6 @@
-package model;
+package model.observers;
+
+import model.Board;
 
 /**
  * An observer interface which the observers need to implement

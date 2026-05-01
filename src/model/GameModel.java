@@ -1,5 +1,11 @@
 package model;
 
+import model.enums.Color;
+import model.enums.GameState;
+import model.enums.SoundEvent;
+import model.observers.GameObserver;
+import model.observers.SoundObserver;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;

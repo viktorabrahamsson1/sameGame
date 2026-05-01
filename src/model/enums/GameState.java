@@ -1,4 +1,4 @@
-package model;
+package model.enums;
 
 /**
  * Represents the possible game states

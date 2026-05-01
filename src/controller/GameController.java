@@ -2,7 +2,7 @@ package controller;
 
 import model.Board;
 import model.GameModel;
-import model.GameState;
+import model.enums.GameState;
 import model.Tile;
 
 import java.util.ArrayList;

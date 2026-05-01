@@ -1,4 +1,7 @@
-package model;
+package model.sounds;
+
+import model.enums.SoundEvent;
+import model.observers.SoundObserver;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

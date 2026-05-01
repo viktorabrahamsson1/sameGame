@@ -1,5 +1,7 @@
 package model;
 
+import model.enums.Color;
+
 /**
  * Represents a tile in the board and contains a color.
  */

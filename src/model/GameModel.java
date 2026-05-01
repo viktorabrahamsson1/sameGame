@@ -16,6 +16,7 @@ public class GameModel {
   private GameState gameState;
   private int numberOfColors;
   private List<GameObserver> observers;
+  private List<SoundObserver> soundObservers;
   private int points;
   private int maxPoints;
 
@@ -31,6 +32,7 @@ public class GameModel {
     this.gameState = GameState.PLAYING;
     this.numberOfColors = numberOfColors;
     this.observers = new ArrayList<>();
+    this.soundObservers = new ArrayList<>();
 
     this.board.setNumberOfColors(numberOfColors);
 
@@ -71,6 +73,12 @@ public class GameModel {
     this.observers.add(observer);
   }
 
+  public void addSoundObserver(SoundObserver observer){
+    if(observer == null)
+      throw new IllegalArgumentException("observer cant be null");
+    this.soundObservers.add(observer);
+  }
+
   /**
    * Deregisters an observer so it no longer receives board updates.
    *
@@ -90,6 +98,11 @@ public class GameModel {
     }
   }
 
+  private void notifySoundObservers(SoundEvent event){
+    for(SoundObserver obs : soundObservers){
+      obs.playSound(event);
+    }
+  }
   /**
    * Removes a connected group from the board, collapses the remaining tiles,
    * updates score and game state, and notifies observers.
@@ -113,6 +126,7 @@ public class GameModel {
     addPoints(connectedTiles.size());
     updateGameState();
     notifyObservers();
+    notifySoundObservers(SoundEvent.TILE_CLEAR);
   }
 
   /**
@@ -333,8 +347,10 @@ public class GameModel {
   public void updateGameState(){
     if(this.checkIfNoTilesLeft()){
       this.gameState = GameState.WON;
+      this.notifySoundObservers(SoundEvent.WON);
     } else if(this.hasNoAvailableMoves()){
       this.gameState = GameState.LOST;
+      this.notifySoundObservers(SoundEvent.LOST);
     } else {
       return;
     }

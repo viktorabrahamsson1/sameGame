@@ -5,6 +5,7 @@ import model.Board;
 import model.GameModel;
 import model.GameObserver;
 import model.GameState;
+import model.MoveSuggestion;
 import model.Tile;
 
 import javax.swing.*;
@@ -20,6 +21,10 @@ public class GuiView extends JFrame implements GameObserver {
   private final JLabel statusLabel;
   private final JLabel difficultyLevel;
   private final JButton playAgainButton;
+  private final JButton bestMoveButton;
+  private final JTextField bestMoveRowField;
+  private final JTextField bestMoveColField;
+  private final JTextField bestMovePointsField;
 
   public GuiView(GameModel model, GameController controller) {
     if (model == null || controller == null) {
@@ -29,6 +34,7 @@ public class GuiView extends JFrame implements GameObserver {
     this.model = model;
     this.controller = controller;
     this.boardPanel = new BoardPanel();
+    this.boardPanel.setPreferredSize(new Dimension(1000, 520));
 
     JLabel titleLabel = new JLabel("SAMEGAME", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -42,17 +48,33 @@ public class GuiView extends JFrame implements GameObserver {
     playAgainButton.setVisible(false);
     playAgainButton.addActionListener(e -> controller.startNewGame());
 
-    JPanel topPanel = new JPanel(new GridLayout(5, 1));
+    bestMoveButton = new JButton("Get best move");
+    bestMoveButton.addActionListener(e -> showBestMoveSuggestion());
+    bestMoveRowField = createSuggestionField();
+    bestMoveColField = createSuggestionField();
+    bestMovePointsField = createSuggestionField();
+
+    JPanel suggestionPanel = new JPanel(new GridLayout(1, 7, 5, 0));
+    suggestionPanel.add(bestMoveButton);
+    suggestionPanel.add(new JLabel("Row:", SwingConstants.RIGHT));
+    suggestionPanel.add(bestMoveRowField);
+    suggestionPanel.add(new JLabel("Col:", SwingConstants.RIGHT));
+    suggestionPanel.add(bestMoveColField);
+    suggestionPanel.add(new JLabel("Points:", SwingConstants.RIGHT));
+    suggestionPanel.add(bestMovePointsField);
+
+    JPanel topPanel = new JPanel(new GridLayout(7, 1));
     topPanel.add(titleLabel);
     topPanel.add(difficultyLevel);
     topPanel.add(scoreLabel);
     topPanel.add(bestScoreLabel);
+    topPanel.add(suggestionPanel);
     topPanel.add(statusLabel);
     topPanel.add(playAgainButton);
 
     setTitle("SameGame");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(800, 600);
+    setSize(1100, 750);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
 
@@ -69,9 +91,39 @@ public class GuiView extends JFrame implements GameObserver {
     difficultyLevel.setText("Difficulty " + model.getDifficultyLevel());
     scoreLabel.setText("Score: " + model.getPoints());
     bestScoreLabel.setText("Best score: " + model.getMaxPoints());
+    clearBestMoveSuggestion();
     updateGameOverControls();
 
     boardPanel.repaint();
+  }
+
+  private JTextField createSuggestionField() {
+    JTextField field = new JTextField("-");
+    field.setEditable(false);
+    field.setHorizontalAlignment(SwingConstants.CENTER);
+    return field;
+  }
+
+  private void showBestMoveSuggestion() {
+    MoveSuggestion suggestion = model.getBestMoveSuggestion();
+
+    if (suggestion == null) {
+      bestMoveRowField.setText("-");
+      bestMoveColField.setText("-");
+      bestMovePointsField.setText("0");
+      statusLabel.setText("No valid move suggestion");
+      return;
+    }
+
+    bestMoveRowField.setText(String.valueOf(suggestion.getRow()));
+    bestMoveColField.setText(String.valueOf(suggestion.getCol()));
+    bestMovePointsField.setText(String.valueOf(suggestion.getPoints()));
+  }
+
+  private void clearBestMoveSuggestion() {
+    bestMoveRowField.setText("-");
+    bestMoveColField.setText("-");
+    bestMovePointsField.setText("-");
   }
 
   private void updateGameOverControls() {
@@ -107,7 +159,15 @@ public class GuiView extends JFrame implements GameObserver {
             return;
           }
 
-          int col = e.getX() / tileSize;
+          int boardWidth = tileSize * board.getColumnSize();
+          int xOffset = (getWidth() - boardWidth) / 2;
+          int adjustedX = e.getX() - xOffset;
+
+          if (adjustedX < 0 || adjustedX >= boardWidth) {
+            return;
+          }
+
+          int col = adjustedX / tileSize;
           int row = e.getY() / tileSize;
 
           controller.playMove(row, col);
@@ -142,7 +202,9 @@ public class GuiView extends JFrame implements GameObserver {
             g.setColor(toAwtColor(tile));
           }
 
-          int x = col * tileSize;
+          int boardWidth = tileSize * board.getColumnSize();
+          int xOffset = (getWidth() - boardWidth) / 2;
+          int x = xOffset + col * tileSize;
           int y = row * tileSize;
 
           g.fillRect(x, y, tileSize, tileSize);

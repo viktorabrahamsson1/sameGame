@@ -371,4 +371,27 @@ public class GameModel {
 
     this.points += tilesRemoved * 4;
   }
+
+  public MoveSuggestion getBestMoveSuggestion() {
+    ArrayList<Tile> visited = new ArrayList<>();
+    int groupSize = 1;
+    MoveSuggestion bestMove = null;
+
+    for (int row = 0; row < this.getBoard().getRowSize(); row++) {
+      for (int col = 0; col < this.getBoard().getColumnSize(); col++) {
+        Tile tile = this.getBoard().getTile(row, col);
+        if(tile == null || visited.contains(tile))
+          continue;
+
+        ArrayList<Tile> connectedTiles = this.findConnectedTiles(tile);
+        visited.addAll(connectedTiles);
+
+        if(connectedTiles.size() > groupSize) {
+          bestMove = new MoveSuggestion(row,col,connectedTiles.size());
+          groupSize = connectedTiles.size();
+        }
+      }
+    }
+    return bestMove;
+  }
 }

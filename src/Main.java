@@ -24,7 +24,7 @@ public class Main {
     gm.addSoundObserver(winSound);
 
     gm.startNewGame();
-    
+
     terminalView.run();
   }
 }

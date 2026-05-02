@@ -1,5 +1,11 @@
 package model;
 
+import model.enums.Color;
+
+/**
+ * Represents the board of the sameGame and contains a column size, row size, board and
+ * number of colors in the board.
+ */
 
 public class Board {
   private final int COLUMNSIZE = 20;
@@ -7,6 +13,9 @@ public class Board {
   private final Tile[][] board;
   private int numberOfColors;
 
+  /**
+   * Initialize a 2D array of Tiles that represents the board
+   */
   public Board(){
     this.board = new Tile[this.ROWSIZE][this.COLUMNSIZE];
   }
@@ -14,15 +23,18 @@ public class Board {
   public int getRowSize(){return this.board.length;}
   public int getColumnSize(){return this.board[0].length;}
   public void setNumberOfColors(int num){
-    if(num <= 0)
-      throw new IllegalArgumentException("amount of colors cant be 0 or less");
+    if(num < 2 || num > 5)
+      throw new IllegalArgumentException("amount of colors must be between 2 and 5");
 
-    if(num < 6){
-      this.numberOfColors = num;
-    } else {
-      this.numberOfColors = 5;
-    }
+    this.numberOfColors = num;
   }
+
+  /**
+   *
+   * @param row the row index to locate
+   * @param col the column index to locate
+   * @return A tile from the board or null if the tile is not valid
+   */
 
   public Tile getTile(int row, int col){
     Tile tile = null;
@@ -39,6 +51,10 @@ public class Board {
     }
   }
 
+  /**
+   * Goes over the board and creates a new Tile with a "random" color
+   * @throws IllegalStateException if the random number is unexpected
+   */
   public void randomizeBoard(){
 
     for(int i = 0; i < this.ROWSIZE; i++){
@@ -59,33 +75,14 @@ public class Board {
     }
   }
 
-  public void printBoard(){
-    StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < this.ROWSIZE; i++){
-      for(int j = 0; j < this.COLUMNSIZE; j++){
-        Tile tile = this.board[i][j];
-        sb.append(tile.getColor()).append(", ");
-      }
-      sb.append("\n");
-    }
-
-    System.out.println(sb);
-  }
-
+  /**
+   *
+   * @param row the row index to be checked if its valid
+   * @param col the column index to be checked if its valid
+   * @return checks if the inputs row and col are valid and returns true / false
+   */
 
   public boolean isValidPosition(int row, int col){
     return col >= 0 && col < this.COLUMNSIZE && row >= 0 && row < ROWSIZE;
   }
-
-  public boolean isEmpty() {
-  for (int row = 0; row < ROWSIZE; row++) {
-    for (int col = 0; col < COLUMNSIZE; col++) {
-      if (board[row][col] != null) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 }

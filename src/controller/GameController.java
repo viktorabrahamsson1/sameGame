@@ -2,7 +2,7 @@ package controller;
 
 import model.Board;
 import model.GameModel;
-import model.GameState;
+import model.enums.GameState;
 import model.Tile;
 
 import java.util.ArrayList;
@@ -61,7 +61,8 @@ public class GameController {
     return true;
   }
 
-  public void startNewGame() {
-    model.startNewGame();
+
+  public void startNewGame(int difficultyLevel) {
+    model.startNewGame(difficultyLevel);
   }
 }

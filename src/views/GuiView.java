@@ -46,7 +46,7 @@ public class GuiView extends JFrame implements GameObserver {
     statusLabel.setFont(new Font("Arial", Font.BOLD, 24));
     playAgainButton = new JButton("Play again");
     playAgainButton.setVisible(false);
-    playAgainButton.addActionListener(e -> controller.startNewGame());
+    playAgainButton.addActionListener(e -> startNewGameWithSelectedDifficulty());
 
     bestMoveButton = new JButton("Get best move");
     bestMoveButton.addActionListener(e -> showBestMoveSuggestion());
@@ -118,6 +118,28 @@ public class GuiView extends JFrame implements GameObserver {
     bestMoveRowField.setText(String.valueOf(suggestion.getRow()));
     bestMoveColField.setText(String.valueOf(suggestion.getCol()));
     bestMovePointsField.setText(String.valueOf(suggestion.getPoints()));
+  }
+
+  private void startNewGameWithSelectedDifficulty() {
+    Integer difficultyLevel = chooseDifficultyLevel();
+
+    if(difficultyLevel != null)
+      controller.startNewGame(difficultyLevel);
+  }
+
+  private Integer chooseDifficultyLevel() {
+    Integer[] difficultyLevels = {2, 3, 4, 5};
+    Integer currentDifficulty = model.getDifficultyLevel();
+
+    return (Integer) JOptionPane.showInputDialog(
+        this,
+        "Choose difficulty level",
+        "New game",
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        difficultyLevels,
+        currentDifficulty
+    );
   }
 
   private void clearBestMoveSuggestion() {

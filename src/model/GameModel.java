@@ -37,12 +37,11 @@ public class GameModel {
   public GameModel(Board board,int numberOfColors) {
     this.board = board;
     this.gameState = GameState.PLAYING;
-    this.numberOfColors = numberOfColors;
     this.observers = new ArrayList<>();
     this.soundObservers = new ArrayList<>();
     this.highScoreManager = new HighScoreManager();
 
-    this.board.setNumberOfColors(numberOfColors);
+    this.setDifficultyLevel(numberOfColors);
 
     this.points = 0;
     this.maxPoints = this.highScoreManager.getBestScore();
@@ -58,6 +57,14 @@ public class GameModel {
 
   private void setMaxPoints(int maxPoints) {this.maxPoints = maxPoints;}
 
+  public void setDifficultyLevel(int numberOfColors){
+    if(numberOfColors < 2 || numberOfColors > 5)
+      throw new IllegalArgumentException("difficulty must be between 2 and 5");
+
+    this.numberOfColors = numberOfColors;
+    this.board.setNumberOfColors(numberOfColors);
+  }
+
   /**
    * Starts a new game by randomizing the board, resetting score and state, and
    * notifying all registered observers.
@@ -67,6 +74,11 @@ public class GameModel {
     this.gameState = GameState.PLAYING;
     this.points = 0;
     this.notifyObservers();
+  }
+
+  public void startNewGame(int numberOfColors){
+    setDifficultyLevel(numberOfColors);
+    startNewGame();
   }
 
   /**

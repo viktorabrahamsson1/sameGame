@@ -23,14 +23,10 @@ public class Board {
   public int getRowSize(){return this.board.length;}
   public int getColumnSize(){return this.board[0].length;}
   public void setNumberOfColors(int num){
-    if(num <= 0)
-      throw new IllegalArgumentException("amount of colors cant be 0 or less");
+    if(num < 2 || num > 5)
+      throw new IllegalArgumentException("amount of colors must be between 2 and 5");
 
-    if(num < 6){
-      this.numberOfColors = num;
-    } else {
-      this.numberOfColors = 5;
-    }
+    this.numberOfColors = num;
   }
 
   /**

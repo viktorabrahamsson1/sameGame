@@ -29,7 +29,7 @@ public class TerminalView implements GameObserver {
     System.out.println("SameGame terminal test");
     System.out.println("Write a move as: row col");
     System.out.println("Write h to get the best move suggestion.");
-    System.out.println("Write p to play again after the game ends.");
+    System.out.println("Write p to play again after the game ends and choose a new difficulty.");
     System.out.println("Write q to quit.");
 
     updateBoard(model.getBoard());
@@ -48,7 +48,7 @@ public class TerminalView implements GameObserver {
       }
 
       if (input.equalsIgnoreCase("p") && model.getGameState() != GameState.PLAYING) {
-        controller.startNewGame();
+        controller.startNewGame(readDifficultyLevel());
         continue;
       }
 
@@ -145,6 +145,24 @@ public class TerminalView implements GameObserver {
     System.out.println("Group size: " + suggestion.getGroupSize());
     System.out.println("Points: " + suggestion.getPoints());
     System.out.println();
+  }
+
+  private int readDifficultyLevel() {
+    while(true) {
+      System.out.print("Choose difficulty level (2-5 colors): ");
+      String input = scanner.nextLine().trim();
+
+      try {
+        int difficultyLevel = Integer.parseInt(input);
+
+        if(difficultyLevel >= 2 && difficultyLevel <= 5)
+          return difficultyLevel;
+
+        System.out.println("Difficulty must be between 2 and 5.");
+      } catch(NumberFormatException e) {
+        System.out.println("Write a number between 2 and 5.");
+      }
+    }
   }
 
   private String getTileSymbol(Tile tile) {

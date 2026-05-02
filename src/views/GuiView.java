@@ -87,8 +87,6 @@ public class GuiView extends JFrame implements GameObserver {
   }
 
   private class BoardPanel extends JPanel {
-    private int hoverRow = -1;
-    private int hoverCol = -1;
     public BoardPanel() {
       addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
@@ -115,28 +113,6 @@ public class GuiView extends JFrame implements GameObserver {
           controller.playMove(row, col);
         }
       });
-
-      addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-    @Override
-    public void mouseMoved(java.awt.event.MouseEvent e) {
-      if (board == null) return;
-
-      int tileSize = Math.min(
-          getWidth() / board.getColumnSize(),
-          getHeight() / board.getRowSize()
-      );
-
-      if (tileSize <= 0) return;
-
-      int offsetX = (getWidth() - tileSize * board.getColumnSize()) / 2;
-      int offsetY = (getHeight() - tileSize * board.getRowSize()) / 2;
-
-      hoverCol = (e.getX() - offsetX) / tileSize;
-      hoverRow = (e.getY() - offsetY) / tileSize;
-
-      repaint();
-    }
-  });
     }
 
     @Override
@@ -158,17 +134,6 @@ public class GuiView extends JFrame implements GameObserver {
       if (tileSize <= 0) {
         return;
       }
-
-      java.util.ArrayList<Tile> highlightTiles = null;
-
-     if (hoverRow >= 0 && hoverCol >= 0) {
-       if (board.isValidPosition(hoverRow, hoverCol)) {
-      Tile tile = board.getTile(hoverRow, hoverCol);
-      if (tile != null) {
-      highlightTiles = model.findConnectedTiles(tile);
-    }
-  }
-}
 
       for (int row = 0; row < board.getRowSize(); row++) {
         for (int col = 0; col < board.getColumnSize(); col++) {

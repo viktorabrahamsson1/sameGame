@@ -36,6 +36,7 @@ public class GameModel {
   public GameState getGameState() {
     return this.gameState;
   }
+  public int getDifficultyLevel(){return this.numberOfColors;}
   private void setMaxPoints(int maxPoints) {
     this.maxPoints = maxPoints;
   }

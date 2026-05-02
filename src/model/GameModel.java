@@ -23,6 +23,7 @@ public class GameModel {
   private int numberOfColors;
   private List<GameObserver> observers;
   private List<SoundObserver> soundObservers;
+  private final HighScoreManager highScoreManager;
   private int points;
   private int maxPoints;
 
@@ -39,11 +40,12 @@ public class GameModel {
     this.numberOfColors = numberOfColors;
     this.observers = new ArrayList<>();
     this.soundObservers = new ArrayList<>();
+    this.highScoreManager = new HighScoreManager();
 
     this.board.setNumberOfColors(numberOfColors);
 
     this.points = 0;
-    this.maxPoints = 0;
+    this.maxPoints = this.highScoreManager.getBestScore();
   }
 
 
@@ -52,6 +54,7 @@ public class GameModel {
   public Board getBoard() {return this.board;}
   public GameState getGameState() {return this.gameState;}
   public int getDifficultyLevel(){return this.numberOfColors;}
+  public List<Integer> getHighScores(){return this.highScoreManager.getHighScores();}
 
   private void setMaxPoints(int maxPoints) {this.maxPoints = maxPoints;}
 
@@ -363,6 +366,9 @@ public class GameModel {
 
     if(this.points > this.maxPoints)
       this.setMaxPoints(this.points);
+
+    if(this.points > 0)
+      this.highScoreManager.addHighScore(this.points);
   }
 
 

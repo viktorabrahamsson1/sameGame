@@ -11,7 +11,7 @@ public class MoveSuggestion {
     this.row = row;
     this.col = col;
     this.groupSize = groupSize;
-    this.points = this.groupSize * 4;
+    this.points = this.groupSize * this.groupSize;
   }
 
   public int getRow() {

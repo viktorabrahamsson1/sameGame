@@ -8,8 +8,8 @@ public class MoveSuggestion {
   private final int points;
 
   public MoveSuggestion(int row, int col, int groupSize) {
-    this.row = row;
-    this.col = col;
+    this.row = row + 1;
+    this.col = col + 1;
     this.groupSize = groupSize;
     this.points = this.groupSize * this.groupSize;
   }

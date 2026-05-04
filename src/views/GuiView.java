@@ -147,19 +147,16 @@ public class GuiView extends JFrame implements GameObserver {
     GameState gameState = model.getGameState();
 
     if (gameState == GameState.LOST) {
-<<<<<<< HEAD
-      statusLabel.setText("GAME OVER: no avaiable moves left"); 
+      statusLabel.setText("GAME OVER: no avaiable moves left");
       statusLabel.setForeground(Color.RED);
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
       statusLabel.setText("GAME OVER: YOU WON");
       statusLabel.setForeground(new Color(0, 150, 0));
-=======
       statusLabel.setText("GAME OVER: No available moves left");
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
       statusLabel.setText("YOU WON");
->>>>>>> 233fb1692d452b6ca6de6f5265733b3e55178713
       playAgainButton.setVisible(true);
     } else {
       statusLabel.setText("");
@@ -185,13 +182,11 @@ public class GuiView extends JFrame implements GameObserver {
             return;
           }
 
-<<<<<<< HEAD
           int offsetX = (getWidth() - tileSize * board.getColumnSize()) / 2;
           int offsetY = (getHeight() - tileSize * board.getRowSize()) / 2;
 
           int col = (e.getX() - offsetX) / tileSize;
           int row = (e.getY() - offsetY) / tileSize;
-=======
           int boardWidth = tileSize * board.getColumnSize();
           int xOffset = (getWidth() - boardWidth) / 2;
           int adjustedX = e.getX() - xOffset;
@@ -200,9 +195,6 @@ public class GuiView extends JFrame implements GameObserver {
             return;
           }
 
-          int col = adjustedX / tileSize;
-          int row = e.getY() / tileSize;
->>>>>>> 233fb1692d452b6ca6de6f5265733b3e55178713
 
           controller.playMove(row, col);
         }
@@ -239,15 +231,10 @@ public class GuiView extends JFrame implements GameObserver {
             g.setColor(toAwtColor(tile));
           }
 
-<<<<<<< HEAD
           int x = offsetX + col * tileSize;
           int y = offsetY + row * tileSize;
-=======
           int boardWidth = tileSize * board.getColumnSize();
           int xOffset = (getWidth() - boardWidth) / 2;
-          int x = xOffset + col * tileSize;
-          int y = row * tileSize;
->>>>>>> 233fb1692d452b6ca6de6f5265733b3e55178713
 
           g.fillRect(x, y, tileSize, tileSize);
           g.setColor(Color.DARK_GRAY);

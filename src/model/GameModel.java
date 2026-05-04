@@ -393,7 +393,7 @@ public class GameModel {
     if(tilesRemoved < 2)
       return;
 
-    this.points += (int) Math.pow(tilesRemoved, 2);
+    this.points += (int) Math.pow(tilesRemoved - 2, 2);
   }
 
   public MoveSuggestion getBestMoveSuggestion() {

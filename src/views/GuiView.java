@@ -110,8 +110,8 @@ public class GuiView extends JFrame implements GameObserver {
       return;
     }
 
-    bestMoveRowField.setText(String.valueOf(suggestion.getRow()));
-    bestMoveColField.setText(String.valueOf(suggestion.getCol()));
+    bestMoveRowField.setText(String.valueOf(suggestion.getRow() + 1));
+    bestMoveColField.setText(String.valueOf(suggestion.getCol() + 1));
     bestMovePointsField.setText(String.valueOf(suggestion.getPoints()));
   }
 

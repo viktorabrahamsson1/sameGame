@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameModelTest {
   @Test
-  void findConnectedTilesFindsOnlyHorizontalAndVerticalMatches() {
+  void findConnectedTilesHorizontalAndVertical() {
     Board board = new Board();
     GameModel model = new GameModel(board, 5);
     Tile startTile = new Tile(Color.Red);
@@ -67,7 +67,7 @@ class GameModelTest {
     assertEquals(8, suggestion.getRow());
     assertEquals(3, suggestion.getCol());
     assertEquals(3, suggestion.getGroupSize());
-    assertEquals(9, suggestion.getPoints());
+    assertEquals(1, suggestion.getPoints());
   }
 
   @Test

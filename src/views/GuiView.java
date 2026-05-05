@@ -5,10 +5,10 @@ import java.awt.*;
 import javax.swing.*;
 import model.Board;
 import model.GameModel;
-import model.observers.GameObserver;
-import model.enums.GameState;
 import model.MoveSuggestion;
 import model.Tile;
+import model.enums.GameState;
+import model.observers.GameObserver;
 
 public class GuiView extends JFrame implements GameObserver {
   private final GameModel model;
@@ -147,13 +147,13 @@ public class GuiView extends JFrame implements GameObserver {
     GameState gameState = model.getGameState();
 
     if (gameState == GameState.LOST) {
-      statusLabel.setText("GAME OVER: no avaiable moves left");
+      statusLabel.setText("GAME OVER: No more moves!");
       statusLabel.setForeground(Color.RED);
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
-      statusLabel.setText("GAME OVER: YOU WON");
+      statusLabel.setText("YOU WON !!");
       statusLabel.setForeground(new Color(0, 150, 0));
-      statusLabel.setText("GAME OVER: No available moves left");
+      statusLabel.setText("GAME OVER: No more moves!");
       playAgainButton.setVisible(true);
     } else if (gameState == GameState.WON) {
       statusLabel.setText("YOU WON");

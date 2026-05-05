@@ -61,6 +61,9 @@ public class GameController {
     return true;
   }
 
+  public void startNewGame() {
+    model.startNewGame();
+  }
 
   public void startNewGame(int difficultyLevel) {
     model.startNewGame(difficultyLevel);

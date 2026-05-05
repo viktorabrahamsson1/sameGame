@@ -140,8 +140,8 @@ public class TerminalView implements GameObserver {
     }
 
     System.out.println("Best move suggestion");
-    System.out.println("Row: " + suggestion.getRow() + 1);
-    System.out.println("Col: " + suggestion.getCol() + 1);
+    System.out.println("Row: " + (suggestion.getRow() + 1));
+    System.out.println("Col: " + (suggestion.getCol() + 1));
     System.out.println("Group size: " + suggestion.getGroupSize());
     System.out.println("Points: " + suggestion.getPoints());
     System.out.println();

@@ -9,7 +9,15 @@ import javax.sound.sampled.Clip;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * Plays a sound effect when the player loses.
+ */
 public class LostSound implements SoundObserver {
+  /**
+   * Plays the lose sound if the event is LOST otherwise does nothing.
+   *
+   * @param event the sound event to handle
+   */
   @Override
   public void playSound(SoundEvent event) {
     if(event != SoundEvent.LOST)

@@ -9,7 +9,15 @@ import javax.sound.sampled.Clip;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * Plays a sound effect when the player wins the game.
+ */
 public class WinSound implements SoundObserver {
+  /**
+   * Plays the win sound if the event is WON otherwise does nothing.
+   *
+   * @param event the sound event to handle
+   */
   @Override
   public void playSound(SoundEvent event) {
     if(event != SoundEvent.WON)

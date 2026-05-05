@@ -9,7 +9,15 @@ import javax.sound.sampled.Clip;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * Plays a sound effect when the player clears a group of tiles.
+ */
 public class TileClearSound implements SoundObserver {
+  /**
+   * Plays the clear tile sound if the event is TILE_CLEAR otherwise does nothing.
+   *
+   * @param event the sound event to handle
+   */
   @Override
   public void playSound(SoundEvent event) {
     if(event != SoundEvent.TILE_CLEAR)

@@ -26,7 +26,6 @@ public class TerminalView implements GameObserver {
   }
 
   public void run() {
-    System.out.println("SameGame terminal test");
     System.out.println("Write a move as: row col");
     System.out.println("Write h to get the best move suggestion.");
     System.out.println("Write p to play again after the game ends and choose a new difficulty.");
